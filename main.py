@@ -56,19 +56,22 @@ def scrape_data_into_excel(url):
         except ValueError:
             continue
 
-    # Save to Excel
-    df = pd.DataFrame(data)
-    df.to_excel("scraped_data.xlsx", index=False)
+    if data:
+        # Save to Excel
+        df = pd.DataFrame(data)
+        df.to_excel("scraped_data.xlsx", index=False)
 
-    # Send the Excel file via gmail
-    send_excel_via_email(
-        file_path = "scraped_data.xlsx",
-        subject = datetime.today().strftime('%d-%m-%Y') + " - New Scraped Data Excel File",
-        body = "The attached Excel file has the scraped data",
-        to_email = os.environ.get("TO_EMAIL"),
-        from_email = os.environ.get("GMAIL_EMAIL"),
-        password = os.environ.get("GMAIL_PASSWORD")
-    )
+        # Send the Excel file via gmail
+        send_excel_via_email(
+            file_path = "scraped_data.xlsx",
+            subject = datetime.today().strftime('%d-%m-%Y') + " - New Scraped Data Excel File",
+            body = "The attached Excel file has the scraped data",
+            to_email = os.environ.get("TO_EMAIL"),
+            from_email = os.environ.get("GMAIL_EMAIL"),
+            password = os.environ.get("GMAIL_PASSWORD")
+        )
+    else:
+        print("No new data found within the last 24 hours.")
 
 def send_excel_via_email(file_path, subject, body, to_email, from_email, password):
     import smtplib
