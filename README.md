@@ -21,7 +21,7 @@ To scrape data from a webpage and save it into an Excel file, then email the fil
     ```
     pip install -r requirements.txt
     ```
-5. Copy the `.env.sample` as an `.env` file in the project root directory and add your email credentials
+5. Copy the `.env.sample` as an `.env` file in the project root directory and add your email credentials, and URL to scrape:
 GMAIL_PASSWORD is a 16 character App Password generated from your Google Account settings.
 https://myaccount.google.com/apppasswords
 

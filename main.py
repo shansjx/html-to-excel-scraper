@@ -75,3 +75,6 @@ def send_excel_via_email(file_path, subject, body, to_email, from_email, passwor
 if __name__ == "__main__":
     load_dotenv()
     scrape_data_into_excel(os.environ.get("URL"))
+    # Clean the generated excel file after sending
+    if os.path.exists("scraped_data.xlsx"):
+        os.remove("scraped_data.xlsx")
