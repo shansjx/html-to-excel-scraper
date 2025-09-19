@@ -4,6 +4,31 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 from datetime import datetime
+import json
+
+def output_result(status, scraped_rows=0, updated_rows=0, output_file="", message=""):
+    """Output structured result for UiPath integration using JSON format"""
+    result = {
+        "status": status,
+        "scraped_rows": scraped_rows,
+        "updated_rows": updated_rows,
+        "output_file": output_file,
+        "message": message,
+        "timestamp": datetime.now().isoformat()
+    }
+    print("UIPATH_OUTPUT_START")
+    print(json.dumps(result))
+    print("UIPATH_OUTPUT_END")
+    
+    # Original output format
+    if scraped_rows > 0:
+        print(f"SCRAPED_ROWS={scraped_rows}")
+    if updated_rows > 0:
+        print(f"UPDATED_ROWS={updated_rows}")
+    if output_file:
+        print(f"OUTPUT_FILE={output_file}")
+    if message:
+        print(message)
 
 def scrape_data_from_html(html, master_excel_path=None):
     # print("[DEBUG] Entered scrape_data_from_html")
@@ -130,19 +155,30 @@ if __name__ == "__main__":
     import sys
     if "--cleanup" in sys.argv:
         cleanup_scraped_file()
+        output_result("CLEANUP_COMPLETED", message="Cleaned up scraped_data.xlsx")
         sys.exit(0)
+    
     html_file = sys.argv[1] if len(sys.argv) > 1 else None
     master_excel = sys.argv[2] if len(sys.argv) > 2 else None
+    
     if not html_file or not os.path.exists(html_file):
-        print("NO_HTML_FILE")
+        output_result("error", message="NO_HTML_FILE")
         sys.exit(1)
+    
     with open(html_file, encoding="utf-8") as f:
         html = f.read()
+    
     if master_excel:
         df, appended = scrape_data_from_html(html, master_excel)
         if appended: # only save if new data was appended
             save_df_to_excel(df)
+            output_result("success", 
+                         scraped_rows=len(df), 
+                         updated_rows=len(df), 
+                         output_file="scraped_data.xlsx",
+                         message="Data successfully scraped and updated")
         else:
-            print("NO_NEW_DATA")
+            output_result("no_new_data", message="NO_NEW_DATA")
     else:
-        print("NO_MASTER_EXCEL")
+        output_result("error", message="NO_MASTER_EXCEL")
+        sys.exit(1)
