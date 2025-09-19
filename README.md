@@ -1,10 +1,12 @@
 # automation-web-scraper
-To scrape data from a webpage and save it into an Excel file, then email the file as an attachment.
-- Implemented with Github Actions to run the script daily at a certain time (8:00am (UTC+8) by default)
-- Add only the most recent items (From 24 hours ago to now (time of script execution))
-- Script only works on tables with timestamp in second column, skip over first column (index column)
+To scrape data from a HTML File, compare with an existing excel sheet, and return only the newest data into a new Excel file ("scraped_data.xlsx") created for UIPath to pick up and use in further automation.
+- Script only works on tables with timestamps in second column, skip over first column (assuming its an index column).
+- A Python Script that can integrate into UIPath workflow.
+### Application case: 
+- Scrape data from a downloaded HTML file, in cases where webpage requires login and authorization to access data
 
-## Local Setup
+
+### Local Setup
 
 1. Clone the repository:
    ```
@@ -17,21 +19,27 @@ To scrape data from a webpage and save it into an Excel file, then email the fil
 3. Create and activate a virtual environment (Windows):
     ```
     python -m venv venv
+
     .\venv\Scripts\activate 
     ```
 4. Install the required packages:
     ```
     pip install -r requirements.txt
     ```
-5. Copy the `.env.sample` as an `.env` file in the project root directory and add your email credentials, and URL to scrape:
-GMAIL_PASSWORD is a 16 character App Password generated from your Google Account settings.
-https://myaccount.google.com/apppasswords
 
-6. Run the script:
+5. Run the script:
     ```
-    python main.py
+    python main.py path/to/your/htmlfile.html path/to/your/masterexcel.xlsx
+    ```
+6. There will be a new file created in the same directory as the script, named `scraped_data.xlsx`, containing only the new rows not present in the master Excel file.
+7. Clean up the file after use:
+    ```
+    python main.py --cleanup
+    ```
+8. Deactivate the virtual environment when done:
+    ```
+    deactivate
     ```
 
 ### Improvements 
-- for specific use case: Enable clicking into a tab (with no subpath in URL)
 - updating to a existing master Excel file instead of a new file each time
