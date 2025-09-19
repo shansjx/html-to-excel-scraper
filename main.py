@@ -25,7 +25,6 @@ def output_result(status, scraped_rows=0, updated_rows=0, output_file="", messag
         print(f"JSON_RESULT_FILE={json_output_file}")
     except Exception as e:
         print(f"ERROR: Could not write JSON result to {json_output_file}: {e}")
-    cleanup_scraped_file("scraped_data.xlsx")
 
     # Original output format
     if scraped_rows > 0:
