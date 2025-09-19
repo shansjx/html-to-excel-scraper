@@ -113,6 +113,7 @@ def scrape_data_from_html(html, master_excel_path=None):
                     print(f"[DEBUG] Not enough empty rows to fill new data at index {target_idx}, skipping.")
                     break
 
+                slot_filled = 0
                 # Check if the target row has missing value or empty string slots in any of the 4 columns
                 for col in ["FirstCol", "SecondCol", "ThirdCol", "FourthCol"]:
                     # to avoid dtype issues by Pandas
@@ -120,7 +121,9 @@ def scrape_data_from_html(html, master_excel_path=None):
                         master_df[col] = master_df[col].astype('object')
                     if pd.isna(master_df.at[target_idx, col]) or master_df.at[target_idx, col].trim() == "":
                         master_df.at[target_idx, col] = new_df.iloc[i][col]
-                updated += 1
+                        slot_filled += 1
+                if slot_filled == len(data): # All slots in this row filled
+                    updated += 1
             if updated > 0:
                 try:
                     master_df.to_excel(master_excel_path, index=False)
