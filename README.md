@@ -1,4 +1,4 @@
-# 📝automation-web-scraper
+# 📝html-to-excel-scraper
 
 A Python Script to scrape data from a HTML File's Table, update an existing Excel file only filling empty cells in the main data columns.and return the newest data into a new Excel file.
 
