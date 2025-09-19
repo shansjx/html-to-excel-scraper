@@ -61,4 +61,5 @@ env.bak/
 venv.bak/
 
 # Generated files
-.xlsx
+*.xlsx
+*.json
