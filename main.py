@@ -7,6 +7,9 @@ from datetime import datetime
 import json
 
 def output_result(status, scraped_rows=0, updated_rows=0, output_file="", message=""):
+    # Save JSON result to file for UiPath to read
+    json_output_file = "scraped_data_result.json"
+
     """Output structured result for UiPath integration using JSON format"""
     result = {
         "status": status,
@@ -14,11 +17,10 @@ def output_result(status, scraped_rows=0, updated_rows=0, output_file="", messag
         "updated_rows": updated_rows,
         "output_file": output_file,
         "message": message,
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
+        "json_result_file": json_output_file
     }
     
-    # Save JSON result to file for UiPath to read
-    json_output_file = "scraped_data_result.json"
     try:
         with open(json_output_file, 'w', encoding='utf-8') as f:
             json.dump(result, f, indent=2, ensure_ascii=False)
