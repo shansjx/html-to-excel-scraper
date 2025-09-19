@@ -155,7 +155,7 @@ if __name__ == "__main__":
     import sys
     if "--cleanup" in sys.argv:
         cleanup_scraped_file()
-        output_result("CLEANUP_COMPLETED", message="Cleaned up scraped_data.xlsx")
+        output_result("cleanup_completed", message="Cleaned up scraped_data.xlsx")
         sys.exit(0)
     
     html_file = sys.argv[1] if len(sys.argv) > 1 else None
