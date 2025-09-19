@@ -113,15 +113,19 @@ def scrape_data_from_html(html, master_excel_path=None):
                     break
 
                 slot_filled = 0
+                total_cols = 0
                 # Check if the target row has missing value or empty string slots in any of the 4 columns
                 for col in ["FirstCol", "SecondCol", "ThirdCol", "FourthCol"]:
+                    total_cols += 1
                     # to avoid dtype issues by Pandas
                     if col in master_df.columns:
                         master_df[col] = master_df[col].astype('object')
-                    if pd.isna(master_df.at[target_idx, col]) or master_df.at[target_idx, col].trim() == "":
+                    if pd.isna(master_df.at[target_idx, col]) or master_df.at[target_idx, col].strip() == "":
                         master_df.at[target_idx, col] = new_df.iloc[i][col]
                         slot_filled += 1
-                if slot_filled == len(data): # All slots in this row filled
+                
+                # Count this row as updated if we filled all slots in it
+                if slot_filled == total_cols:
                     updated += 1
             if updated > 0:
                 try:
