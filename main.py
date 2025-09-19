@@ -16,9 +16,15 @@ def output_result(status, scraped_rows=0, updated_rows=0, output_file="", messag
         "message": message,
         "timestamp": datetime.now().isoformat()
     }
-    print("UIPATH_OUTPUT_START")
-    print(json.dumps(result))
-    print("UIPATH_OUTPUT_END")
+    
+    # Save JSON result to file for UiPath to read
+    json_output_file = "scraped_data_result.json"
+    try:
+        with open(json_output_file, 'w', encoding='utf-8') as f:
+            json.dump(result, f, indent=2, ensure_ascii=False)
+        print(f"JSON_RESULT_FILE={json_output_file}")
+    except Exception as e:
+        print(f"ERROR: Could not write JSON result to {json_output_file}: {e}")
     
     # Original output format
     if scraped_rows > 0:
