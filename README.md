@@ -1,10 +1,23 @@
-# automation-web-scraper
-To scrape data from a webpage and save it into an Excel file, then email the file as an attachment.
-- Implemented with Github Actions to run the script daily at a certain time (8:00am (UTC+8) by default)
-- Add only the most recent items (From 24 hours ago to now (time of script execution))
-- Script only works on tables with timestamp in second column, skip over first column (index column)
+# 📝automation-web-scraper
 
-## Local Setup
+A Python Script to scrape data from a HTML File's Table, update an existing Excel file only filling empty cells in the main data columns.and return the newest data into a new Excel file.
+
+## How It Works✨
+
+- The script finds the latest timestamp in the Excel file.
+- It scrapes new rows from the HTML table with newer timestamps.
+- For each new row, it fills the next available empty cell in the main columns (`FirstCol`, `SecondCol`, `ThirdCol`, `FourthCol`) in the rows immediately after the latest timestamp.
+- No existing data in other columns or rows is overwritten or shifted.
+
+## Notes:
+- Script only works on tables with timestamps in second column of html file table, skip over first column (assuming its an index column).
+- New data file ("scraped_data.xlsx") only if there is new data not found in the master excel file.
+
+- Scrape data from a downloaded HTML file, in cases where webpage requires login and authorization to access
+- Can integrate into UIPath workflow.
+
+
+### Local Setup
 
 1. Clone the repository:
    ```
@@ -17,21 +30,28 @@ To scrape data from a webpage and save it into an Excel file, then email the fil
 3. Create and activate a virtual environment (Windows):
     ```
     python -m venv venv
+
     .\venv\Scripts\activate 
     ```
 4. Install the required packages:
     ```
     pip install -r requirements.txt
     ```
-5. Copy the `.env.sample` as an `.env` file in the project root directory and add your email credentials, and URL to scrape:
-GMAIL_PASSWORD is a 16 character App Password generated from your Google Account settings.
-https://myaccount.google.com/apppasswords
 
-6. Run the script:
+5. Run the script: (Ensure HTML file and master Excel file are closed before running)
     ```
-    python main.py
+    python main.py path/to/your/htmlfile.html path/to/your/masterexcel.xlsx
+    ```
+6. There will be a new file created in the same directory as the script, named `scraped_data.xlsx`, containing only the new rows not present in the master Excel file.
+7. Clean up the file after use:
+    ```
+    python main.py --cleanup
+    ```
+8. Deactivate the virtual environment when done:
+    ```
+    deactivate
     ```
 
-### Improvements 
-- for specific use case: Enable clicking into a tab (with no subpath in URL)
-- updating to a existing master Excel file instead of a new file each time
+## Troubleshooting
+
+- **File is open or locked:** Close the Excel file before running the script.
